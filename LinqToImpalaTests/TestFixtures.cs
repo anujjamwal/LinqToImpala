@@ -1,10 +1,37 @@
-﻿using System.Collections.Specialized;
+﻿using System;
+using System.Collections.Specialized;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Data.Common;
+using System.Data.Odbc;
 using System.Linq;
+using ImpalaToLinq;
 using ImpalaToLinq.ImpalaToLinq;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace LinqToImpalaTests 
 {
+  class Config
+  {
+    public readonly static Boolean RunIntegration = false;
+  }
+
+  class IntegrationTestRunner : IDisposable {
+    public  ImpalaDbContext DbContext { get; private set; }
+    public DbConnection Connection { get; private set; }
+    public IntegrationTestRunner() {
+      if (!Config.RunIntegration) {
+        Assert.Inconclusive("Integration Tests Ignored. Check the [RunIntegration] property in [Config] class in [TestFixtures.cs] file");
+      }
+      Connection = new OdbcConnection("DSN=olga_impala");
+      Connection.Open();
+      DbContext = new ImpalaDbContext(new ImpalaQueryProvider(Connection));
+    }
+
+    public void Dispose() {
+      Connection.Dispose();
+    }
+  }
+
   [Table("Persons")]
   class Person {
     public string ID { get; set; }

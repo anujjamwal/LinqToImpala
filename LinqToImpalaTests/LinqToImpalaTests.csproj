@@ -55,6 +55,7 @@
     </Otherwise>
   </Choose>
   <ItemGroup>
+    <Compile Include="IntegrationTests.cs" />
     <Compile Include="TestFixtures.cs" />
     <Compile Include="SelectTest.cs" />
     <Compile Include="WhereClauseTest.cs" />

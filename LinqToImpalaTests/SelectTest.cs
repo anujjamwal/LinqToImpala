@@ -19,7 +19,7 @@ namespace LinqToImpalaTests
 
       var query = dbContext.persons;
 
-      Assert.AreEqual("SELECT * FROM Person", query.ToString());
+      Assert.AreEqual("SELECT T0.* FROM Person T0", query.ToString());
     }
   }
 }

@@ -7,10 +7,15 @@ namespace ImpalaToLinq.Translator
 {
   internal class ImpalaExpressionVisitor: ExpressionVisitor {
     private readonly Expression _expression;
+    private readonly int _depth;
     private readonly StringBuilder _sb;
 
-    public ImpalaExpressionVisitor(Expression expression) {
+    public ImpalaExpressionVisitor(Expression expression):this(expression, 0) {
+    }
+    public ImpalaExpressionVisitor(Expression expression, int depth)
+    {
       _expression = expression;
+      _depth = depth;
       _sb = new StringBuilder();
     }
 
@@ -22,11 +27,11 @@ namespace ImpalaToLinq.Translator
     protected override Expression VisitMethodCall(MethodCallExpression node)
     {
       if (node.Method.Name == "Where") {
-        _sb.Append("SELECT * FROM ( ");
-        _sb.Append(new ImpalaExpressionVisitor(node.Arguments[0]).GetQuery());
-        _sb.Append(") WHERE ");
+        _sb.Append("SELECT ").Append(GetTableAlias()).Append(".* FROM ( ");
+        _sb.Append(new ImpalaExpressionVisitor(node.Arguments[0], _depth+1).GetQuery());
+        _sb.Append(") ").Append(GetTableAlias()).Append(" WHERE ");
         var lambda = (LambdaExpression)StripQuotes(node.Arguments[1]);
-        _sb.Append(new ImpalaExpressionVisitor(lambda.Body).GetQuery());
+        _sb.Append(new ImpalaExpressionVisitor(lambda.Body, _depth).GetQuery());
         return node;
       }
       throw new NotSupportedException(string.Format("The method call '{0}' is not supported", node.NodeType));
@@ -34,8 +39,8 @@ namespace ImpalaToLinq.Translator
 
     protected override Expression VisitBinary(BinaryExpression b) {
       _sb.Append("(");
-      _sb.Append(new ImpalaExpressionVisitor(b.Left).GetQuery());
-      var rightExpression = new ImpalaExpressionVisitor(b.Right).GetQuery();
+      _sb.Append(new ImpalaExpressionVisitor(b.Left, _depth).GetQuery());
+      var rightExpression = new ImpalaExpressionVisitor(b.Right, _depth).GetQuery();
  
       switch (b.NodeType)
       {
@@ -79,8 +84,9 @@ namespace ImpalaToLinq.Translator
       if (q != null)
       {
         // assume constant nodes w/ IQueryables are table references
-        _sb.Append("SELECT * FROM ");
+        _sb.Append("SELECT ").Append(GetTableAlias()).Append(".* FROM ");
         _sb.Append(q.ElementType.Name);
+        _sb.Append(" ").Append(GetTableAlias());
       }
       else if (node.Value == null)
       {
@@ -118,18 +124,22 @@ namespace ImpalaToLinq.Translator
     {
       if (node.Expression != null && node.Expression.NodeType == ExpressionType.Parameter)
       {
-        _sb.Append(node.Member.Name);
+        _sb.Append(GetTableAlias()).Append(".").Append(node.Member.Name);
         return node;
       }
       throw new NotSupportedException(string.Format("The member '{0}' is not supported", node.Member.Name));
     }
-    private static Expression StripQuotes(Expression e)
+    private Expression StripQuotes(Expression e)
     {
       while (e.NodeType == ExpressionType.Quote)
       {
         e = ((UnaryExpression)e).Operand;
       }
       return e;
+    }
+
+    private string GetTableAlias() {
+      return "T" + _depth;
     }
   }
 }
