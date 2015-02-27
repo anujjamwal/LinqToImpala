@@ -39,10 +39,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Class1.cs" />
     <Compile Include="ImpalaQueryProvider.cs" />
+    <Compile Include="ModelUtils.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="QueryProvider.cs" />
+    <Compile Include="Translator\Evaluator.cs" />
     <Compile Include="Translator\ImpalaQueryTranslator.cs" />
     <Compile Include="Translator\ImpalaExpressionVisitor.cs" />
   </ItemGroup>

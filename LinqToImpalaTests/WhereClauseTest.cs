@@ -19,7 +19,16 @@ namespace LinqToImpalaTests
     }
 
     [TestMethod]
-    public void TestMethod1() {
+    public void ShouldWhereClauseQueryForStringEqualityCheckFromVariable()
+    {
+      var name = "Anuj";
+      var query = _dbContext.persons.Where(p => p.Name == name);
+
+      Assert.AreEqual("SELECT T0.* FROM ( SELECT T1.* FROM Person T1) T0 WHERE (T0.Name = 'Anuj')", query.ToString());
+    }
+
+    [TestMethod]
+    public void ShouldWhereClauseQueryForStringEqualityCheck() {
       var query = _dbContext.persons.Where(p => p.Name == "Anuj");
 
       Assert.AreEqual("SELECT T0.* FROM ( SELECT T1.* FROM Person T1) T0 WHERE (T0.Name = 'Anuj')", query.ToString());

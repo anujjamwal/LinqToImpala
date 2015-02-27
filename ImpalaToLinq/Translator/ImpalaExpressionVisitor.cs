@@ -85,7 +85,7 @@ namespace ImpalaToLinq.Translator
       {
         // assume constant nodes w/ IQueryables are table references
         _sb.Append("SELECT ").Append(GetTableAlias()).Append(".* FROM ");
-        _sb.Append(q.ElementType.Name);
+        _sb.Append(ModelUtils.TableName(q));
         _sb.Append(" ").Append(GetTableAlias());
       }
       else if (node.Value == null)
@@ -124,7 +124,7 @@ namespace ImpalaToLinq.Translator
     {
       if (node.Expression != null && node.Expression.NodeType == ExpressionType.Parameter)
       {
-        _sb.Append(GetTableAlias()).Append(".").Append(node.Member.Name);
+        _sb.Append(GetTableAlias()).Append(".").Append(ModelUtils.ColumnNameForField(node.Member));
         return node;
       }
       throw new NotSupportedException(string.Format("The member '{0}' is not supported", node.Member.Name));
