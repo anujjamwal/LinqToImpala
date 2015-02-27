@@ -32,7 +32,6 @@ namespace LinqToImpalaTests
     }
   }
 
-  [Table("Persons")]
   class Person {
     public string ID { get; set; }
     public string Name { get; set; }
@@ -40,11 +39,23 @@ namespace LinqToImpalaTests
     public bool Married { get; set; }
   }
 
+  [Table("customer_master_table")]
+  class Customer
+  {
+    [Column("customernumber")]
+    public string ID { get; set; }
+    [Column("dealercustomername")]
+    public string Name { get; set; }
+  }
+
+
   class ImpalaDbContext {
     public ImpalaQueryable<Person> persons { get; private set; }
+    public ImpalaQueryable<Customer> customers { get; private set; }
 
     public ImpalaDbContext(IQueryProvider queryProvider) {
       persons = new ImpalaQueryable<Person>(queryProvider);
+      customers = new ImpalaQueryable<Customer>(queryProvider);
     }
   }
 }

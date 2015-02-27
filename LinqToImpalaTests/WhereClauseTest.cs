@@ -137,4 +137,23 @@ namespace LinqToImpalaTests
       Assert.AreEqual("SELECT T0.* FROM ( SELECT T1.* FROM Person T1) T0 WHERE (T0.Age >= 10)", query.ToString());
     }
   }
+
+  [TestClass]
+  public class WhereClauseWithModelAttributeTest {
+    private ImpalaDbContext _dbContext;
+
+    [TestInitialize]
+    public void Setup() {
+      var connection = new Mock<DbConnection>();
+      _dbContext = new ImpalaDbContext(new ImpalaQueryProvider(connection.Object));
+    }
+
+    [TestMethod]
+    public void ShouldWhereClauseQueryForStringEqualityCheckFromVariable() {
+      var name = "Anuj";
+      var query = _dbContext.customers.Where(p => p.Name == name);
+
+      Assert.AreEqual("SELECT T0.* FROM ( SELECT T1.* FROM customer_master_table T1) T0 WHERE (T0.dealercustomername = 'Anuj')", query.ToString());
+    }
+  }
 }

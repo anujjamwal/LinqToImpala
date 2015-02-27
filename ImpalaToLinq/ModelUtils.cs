@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System.ComponentModel.DataAnnotations.Schema;
+using System.Linq;
 using System.Reflection;
 
 namespace ImpalaToLinq
@@ -6,11 +7,13 @@ namespace ImpalaToLinq
   class ModelUtils
   {
     public static string ColumnNameForField(MemberInfo member) {
-      return member.Name;
+      var columnAttribute = member.GetCustomAttribute<ColumnAttribute>();
+      return columnAttribute != null && columnAttribute.Name != null ? columnAttribute.Name : member.Name ;
     }
 
     public static string TableName(IQueryable queryable) {
-      return queryable.ElementType.Name;
+      var tableAttribute = queryable.ElementType.GetCustomAttribute<TableAttribute>();
+      return tableAttribute != null && tableAttribute.Name != null ? tableAttribute.Name : queryable.ElementType.Name;
     }
   }
 }

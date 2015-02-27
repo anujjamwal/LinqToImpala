@@ -12,7 +12,7 @@ namespace LinqToImpalaTests
   {
 
     [TestMethod]
-    public void TestMethod1()
+    public void ShouldBuildBasicSelectQuery()
     {
       var connection = new Mock<DbConnection>();
       var dbContext = new ImpalaDbContext(new ImpalaQueryProvider(connection.Object));
@@ -20,6 +20,17 @@ namespace LinqToImpalaTests
       var query = dbContext.persons;
 
       Assert.AreEqual("SELECT T0.* FROM Person T0", query.ToString());
+    }
+
+    [TestMethod]
+    public void ShouldBuildBasicSelectQueryWithDataAttributesOnModel()
+    {
+      var connection = new Mock<DbConnection>();
+      var dbContext = new ImpalaDbContext(new ImpalaQueryProvider(connection.Object));
+
+      var query = dbContext.customers;
+
+      Assert.AreEqual("SELECT T0.* FROM customer_master_table T0", query.ToString());
     }
   }
 }
