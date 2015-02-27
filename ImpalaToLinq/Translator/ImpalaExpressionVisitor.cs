@@ -35,16 +35,40 @@ namespace ImpalaToLinq.Translator
     protected override Expression VisitBinary(BinaryExpression b) {
       _sb.Append("(");
       _sb.Append(new ImpalaExpressionVisitor(b.Left).GetQuery());
-        
+      var rightExpression = new ImpalaExpressionVisitor(b.Right).GetQuery();
+ 
       switch (b.NodeType)
       {
+        case ExpressionType.AndAlso:
+        case ExpressionType.And:
+          _sb.Append(" AND ");
+          break;
+        case ExpressionType.OrElse:
+        case ExpressionType.Or:
+          _sb.Append(" OR ");
+          break;
         case ExpressionType.Equal:
-          _sb.Append(" = ");
+          _sb.Append(rightExpression == "NULL" ? " IS " : " = ");
+          break;
+        case ExpressionType.NotEqual:
+          _sb.Append(rightExpression == "NULL" ? " IS NOT " : " <> ");
+          break;
+        case ExpressionType.LessThan:
+          _sb.Append(" < ");
+          break;
+        case ExpressionType.LessThanOrEqual:
+          _sb.Append(" <= ");
+          break;
+        case ExpressionType.GreaterThan:
+          _sb.Append(" > ");
+          break;
+        case ExpressionType.GreaterThanOrEqual:
+          _sb.Append(" >= ");
           break;
         default:
           throw new NotSupportedException(string.Format("The binary operator '{0}' is not supported", b.NodeType));
       }
-      _sb.Append(new ImpalaExpressionVisitor(b.Right).GetQuery());
+      _sb.Append(rightExpression);
       _sb.Append(")");
       return b;
     }
@@ -66,7 +90,9 @@ namespace ImpalaToLinq.Translator
         switch (Type.GetTypeCode(node.Value.GetType()))
         {
           case TypeCode.Boolean:
-            _sb.Append(((bool)node.Value) ? 1 : 0);
+            _sb.Append("'");
+            _sb.Append(((bool)node.Value) ? "true" : "false");
+            _sb.Append("'");
             break;
           case TypeCode.String:
             _sb.Append("'");
