@@ -19,7 +19,7 @@ namespace LinqToImpalaTests
 
       var query = dbContext.persons;
 
-      Assert.AreEqual("SELECT T0.* FROM Person T0", query.ToString());
+      Assert.AreEqual("SELECT T0.* FROM (Person) T0", query.ToString());
     }
 
     [TestMethod]
@@ -30,7 +30,7 @@ namespace LinqToImpalaTests
 
       var query = dbContext.customers;
 
-      Assert.AreEqual("SELECT T0.* FROM customer_master_table T0", query.ToString());
+      Assert.AreEqual("SELECT T0.* FROM (customer_master_table) T0", query.ToString());
     }
   }
 }

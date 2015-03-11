@@ -10,7 +10,7 @@
 
   namespace ImpalaToLinq
   {
-    public class ImpalaQueryable<TData> : IQueryable<TData>
+    public class ImpalaQueryable<TData> : IOrderedQueryable<TData>
     {
       public ImpalaQueryable(IQueryProvider provider)
       {

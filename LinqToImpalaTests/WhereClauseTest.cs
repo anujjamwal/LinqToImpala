@@ -24,14 +24,14 @@ namespace LinqToImpalaTests
       var name = "Anuj";
       var query = _dbContext.persons.Where(p => p.Name == name);
 
-      Assert.AreEqual("SELECT T0.* FROM ( SELECT T1.* FROM Person T1) T0 WHERE (T0.Name = 'Anuj')", query.ToString());
+      Assert.AreEqual("SELECT T0.* FROM (Person) T0 WHERE (T0.Name = 'Anuj')", query.ToString());
     }
 
     [TestMethod]
     public void ShouldWhereClauseQueryForStringEqualityCheck() {
       var query = _dbContext.persons.Where(p => p.Name == "Anuj");
 
-      Assert.AreEqual("SELECT T0.* FROM ( SELECT T1.* FROM Person T1) T0 WHERE (T0.Name = 'Anuj')", query.ToString());
+      Assert.AreEqual("SELECT T0.* FROM (Person) T0 WHERE (T0.Name = 'Anuj')", query.ToString());
     }
 
     [TestMethod]
@@ -39,7 +39,7 @@ namespace LinqToImpalaTests
     {
       var query = _dbContext.persons.Where(p => p.Married == false);
 
-      Assert.AreEqual("SELECT T0.* FROM ( SELECT T1.* FROM Person T1) T0 WHERE (T0.Married = 'false')", query.ToString());
+      Assert.AreEqual("SELECT T0.* FROM (Person) T0 WHERE (T0.Married = 'false')", query.ToString());
     }
     
     [TestMethod]
@@ -47,14 +47,14 @@ namespace LinqToImpalaTests
     {
       var query = _dbContext.persons.Where(p => p.Age == 10);
 
-      Assert.AreEqual("SELECT T0.* FROM ( SELECT T1.* FROM Person T1) T0 WHERE (T0.Age = 10)", query.ToString());
+      Assert.AreEqual("SELECT T0.* FROM (Person) T0 WHERE (T0.Age = 10)", query.ToString());
     }
 
     [TestMethod]
     public void ShouldConstructTheIsNullQueryCorrectly() {
       var query = _dbContext.persons.Where(p => p.Name == null);
 
-      Assert.AreEqual("SELECT T0.* FROM ( SELECT T1.* FROM Person T1) T0 WHERE (T0.Name IS NULL)", query.ToString());
+      Assert.AreEqual("SELECT T0.* FROM (Person) T0 WHERE (T0.Name IS NULL)", query.ToString());
     }
 
     [TestMethod]
@@ -62,7 +62,7 @@ namespace LinqToImpalaTests
     {
       var query = _dbContext.persons.Where(p => p.Name != null);
 
-      Assert.AreEqual("SELECT T0.* FROM ( SELECT T1.* FROM Person T1) T0 WHERE (T0.Name IS NOT NULL)", query.ToString());
+      Assert.AreEqual("SELECT T0.* FROM (Person) T0 WHERE (T0.Name IS NOT NULL)", query.ToString());
     }
 
     [TestMethod]
@@ -70,7 +70,7 @@ namespace LinqToImpalaTests
     {
       var query = _dbContext.persons.Where(p => p.Age == 30 & p.Married == false);
 
-      Assert.AreEqual("SELECT T0.* FROM ( SELECT T1.* FROM Person T1) T0 WHERE ((T0.Age = 30) AND (T0.Married = 'false'))", query.ToString());
+      Assert.AreEqual("SELECT T0.* FROM (Person) T0 WHERE ((T0.Age = 30) AND (T0.Married = 'false'))", query.ToString());
     }
 
     [TestMethod]
@@ -78,7 +78,7 @@ namespace LinqToImpalaTests
     {
       var query = _dbContext.persons.Where(p => p.Age == 30 && p.Married == false);
 
-      Assert.AreEqual("SELECT T0.* FROM ( SELECT T1.* FROM Person T1) T0 WHERE ((T0.Age = 30) AND (T0.Married = 'false'))", query.ToString());
+      Assert.AreEqual("SELECT T0.* FROM (Person) T0 WHERE ((T0.Age = 30) AND (T0.Married = 'false'))", query.ToString());
     }
 
     [TestMethod]
@@ -86,7 +86,7 @@ namespace LinqToImpalaTests
     {
       var query = _dbContext.persons.Where(p => p.Age == 30 | p.Married == false);
 
-      Assert.AreEqual("SELECT T0.* FROM ( SELECT T1.* FROM Person T1) T0 WHERE ((T0.Age = 30) OR (T0.Married = 'false'))", query.ToString());
+      Assert.AreEqual("SELECT T0.* FROM (Person) T0 WHERE ((T0.Age = 30) OR (T0.Married = 'false'))", query.ToString());
     }
 
     [TestMethod]
@@ -94,7 +94,7 @@ namespace LinqToImpalaTests
     {
       var query = _dbContext.persons.Where(p => p.Age == 30 || p.Married == false);
 
-      Assert.AreEqual("SELECT T0.* FROM ( SELECT T1.* FROM Person T1) T0 WHERE ((T0.Age = 30) OR (T0.Married = 'false'))", query.ToString());
+      Assert.AreEqual("SELECT T0.* FROM (Person) T0 WHERE ((T0.Age = 30) OR (T0.Married = 'false'))", query.ToString());
     }
 
     [TestMethod]
@@ -102,7 +102,7 @@ namespace LinqToImpalaTests
     {
       var query = _dbContext.persons.Where(p => p.Age != 10);
 
-      Assert.AreEqual("SELECT T0.* FROM ( SELECT T1.* FROM Person T1) T0 WHERE (T0.Age <> 10)", query.ToString());
+      Assert.AreEqual("SELECT T0.* FROM (Person) T0 WHERE (T0.Age <> 10)", query.ToString());
     }
 
     [TestMethod]
@@ -110,7 +110,7 @@ namespace LinqToImpalaTests
     {
       var query = _dbContext.persons.Where(p => p.Age < 10);
 
-      Assert.AreEqual("SELECT T0.* FROM ( SELECT T1.* FROM Person T1) T0 WHERE (T0.Age < 10)", query.ToString());
+      Assert.AreEqual("SELECT T0.* FROM (Person) T0 WHERE (T0.Age < 10)", query.ToString());
     }
 
     [TestMethod]
@@ -118,7 +118,7 @@ namespace LinqToImpalaTests
     {
       var query = _dbContext.persons.Where(p => p.Age <= 10);
 
-      Assert.AreEqual("SELECT T0.* FROM ( SELECT T1.* FROM Person T1) T0 WHERE (T0.Age <= 10)", query.ToString());
+      Assert.AreEqual("SELECT T0.* FROM (Person) T0 WHERE (T0.Age <= 10)", query.ToString());
     }
 
     [TestMethod]
@@ -126,7 +126,7 @@ namespace LinqToImpalaTests
     {
       var query = _dbContext.persons.Where(p => p.Age > 10);
 
-      Assert.AreEqual("SELECT T0.* FROM ( SELECT T1.* FROM Person T1) T0 WHERE (T0.Age > 10)", query.ToString());
+      Assert.AreEqual("SELECT T0.* FROM (Person) T0 WHERE (T0.Age > 10)", query.ToString());
     }
 
     [TestMethod]
@@ -134,7 +134,7 @@ namespace LinqToImpalaTests
     {
       var query = _dbContext.persons.Where(p => p.Age >= 10);
 
-      Assert.AreEqual("SELECT T0.* FROM ( SELECT T1.* FROM Person T1) T0 WHERE (T0.Age >= 10)", query.ToString());
+      Assert.AreEqual("SELECT T0.* FROM (Person) T0 WHERE (T0.Age >= 10)", query.ToString());
     }
   }
 
@@ -153,7 +153,7 @@ namespace LinqToImpalaTests
       var name = "Anuj";
       var query = _dbContext.customers.Where(p => p.Name == name);
 
-      Assert.AreEqual("SELECT T0.* FROM ( SELECT T1.* FROM customer_master_table T1) T0 WHERE (T0.dealercustomername = 'Anuj')", query.ToString());
+      Assert.AreEqual("SELECT T0.* FROM (customer_master_table) T0 WHERE (T0.dealercustomername = 'Anuj')", query.ToString());
     }
   }
 }

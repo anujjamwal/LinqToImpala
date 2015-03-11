@@ -47,6 +47,7 @@
     <Compile Include="Translator\Evaluator.cs" />
     <Compile Include="Translator\ImpalaQueryTranslator.cs" />
     <Compile Include="Translator\ImpalaExpressionVisitor.cs" />
+    <Compile Include="Translator\LinqExpressionVisitor.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

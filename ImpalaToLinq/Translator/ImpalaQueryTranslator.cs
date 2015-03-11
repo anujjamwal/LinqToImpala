@@ -10,7 +10,7 @@ namespace ImpalaToLinq.Translator
 
     internal string Translate(Expression expression)
     {
-      return new ImpalaExpressionVisitor(Evaluator.PartialEval(expression)).GetQuery();
+      return new ImpalaExpressionVisitor().GetQuery(Evaluator.PartialEval(expression));
     }
 
   }
